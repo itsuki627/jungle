@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Veterinaria mao vet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, #e3f2fd 0%, #fffde7 100%);
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background: #43a047;
+      padding: 18px 0;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 4px 12px rgba(67, 160, 71, 0.15);
+      text-align: center;
+      margin-bottom: 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 18px;
+      font-weight: 600;
+      font-size: 1.05em;
+      letter-spacing: 1px;
+      transition: color 0.2s, border-bottom 0.2s;
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      display: inline-block;
+    }
+    nav a:hover, nav a:focus {
+      color: #ffd54f;
+      border-bottom: 2px solid #ffd54f;
+    }
+    .apartado {
+      background: #fff;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 32px 28px;
+      border-radius: 14px;
+      box-shadow: 0 2px 16px rgba(67, 160, 71, 0.07);
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+      transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1);
+      will-change: opacity, transform;
+      display: none;
+    }
+    .apartado.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      display: block;
+    }
+    h2 {
+      color: #43a047;
+      margin-top: 0;
+      font-size: 2em;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+    }
+    ul {
+      padding-left: 20px;
+      margin-bottom: 0;
+    }
+    li {
+      margin-bottom: 8px;
+      font-size: 1.08em;
+    }
+    .link-apartado {
+      color: #388e3c;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.2s;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .link-apartado:hover {
+      color: #ffd54f;
+    }
+    .galeria-imgs, .servicio-imgs, .banos-imgs, .laboratorio-imgs {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .galeria-imgs img, .servicio-imgs img, .banos-imgs img, .laboratorio-imgs img {
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(67, 160, 71, 0.10);
+      width: 180px;
+      height: 120px;
+      object-fit: cover;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .galeria-imgs img:hover, .servicio-imgs img:hover, .banos-imgs img:hover, .laboratorio-imgs img:hover {
+      transform: scale(1.07) rotate(-2deg);
+      box-shadow: 0 6px 18px rgba(67, 160, 71, 0.18);
+    }
+    form {
+      margin-top: 16px;
+    }
+    label {
+      font-weight: 500;
+      color: #43a047;
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      margin: 8px 0 18px 0;
+      border: 1.5px solid #bdbdbd;
+      border-radius: 6px;
+      font-size: 1em;
+      background: #f5faff;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      border-color: #43a047;
+      outline: none;
+    }
+    button[type="submit"], .btn-reservar, .btn-comprar {
+      background: #43a047;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+      margin-right: 8px;
+    }
+    button[type="submit"]:hover, .btn-reservar:hover, .btn-comprar:hover {
+      background: #388e3c;
+    }
+    .productos-lista {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 18px;
+    }
+    .producto-card {
+      background: #f9fbe7;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(67, 160, 71, 0.10);
+      padding: 18px 16px;
+      width: 260px;
+      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+    .producto-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(67, 160, 71, 0.18);
+    }
+    .producto-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 6px rgba(67, 160, 71, 0.10);
+    }
+    .producto-card h3 {
+      margin: 0 0 8px 0;
+      color: #388e3c;
+      font-size: 1.1em;
+    }
+    .producto-card p {
+      font-size: 0.98em;
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    .reserva-casilla {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+    .reserva-casilla input[type="text"] {
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.4);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 30px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(67,160,71,0.18);
+      max-width: 350px;
+      width: 90vw;
+      position: relative;
+      animation: fadeIn 0.5s;
+    }
+    .close-modal {
+      position: absolute;
+      top: 10px; right: 18px;
+      font-size: 1.5em;
+      color: #43a047;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    /* Equipo */
+    .equipo-lista {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 18px;
+      justify-content: center;
+    }
+    .equipo-card {
+      background: #f9fbe7;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(67, 160, 71, 0.10);
+      padding: 18px 16px;
+      width: 220px;
+      flex: 1 1 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .equipo-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 6px rgba(67, 160, 71, 0.10);
+    }
+    .equipo-card h4 {
+      margin: 0 0 6px 0;
+      color: #388e3c;
+      font-size: 1.08em;
+    }
+    .equipo-card p {
+      font-size: 0.97em;
+      margin: 0 0 6px 0;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .productos-lista, .equipo-lista {
+        flex-direction: column;
+        align-items: center;
+      }
+      .producto-card, .equipo-card {
+        width: 90vw;
+      }
+    }
+    @media (max-width: 800px) {
+      .apartado {
+        max-width: 98vw;
+        padding: 18px 4vw;
+      }
+      .galeria-imgs, .servicio-imgs, .banos-imgs, .laboratorio-imgs {
+        flex-direction: column;
+        align-items: center;
+      }
+      .galeria-imgs img, .servicio-imgs img, .banos-imgs img, .laboratorio-imgs img {
+        width: 90vw;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#" onclick="mostrarApartado('inicio')">Inicio</a>
+    <a href="#" onclick="mostrarApartado('nosotros')">Nosotros</a>
+    <a href="#" onclick="mostrarApartado('servicios')">Servicios</a>
+    <a href="#" onclick="mostrarApartado('reserva')">Reserva de Citas</a>
+    <a href="#" onclick="mostrarApartado('local')">Información del Local</a>
+    <a href="#" onclick="mostrarApartado('productos')">Productos</a>
+    <a href="#" onclick="mostrarApartado('galeria')">Galería</a>
+    <a href="#" onclick="mostrarApartado('equipo')">Equipo</a>
+    <a href="#" onclick="mostrarApartado('contacto')">Contacto</a>
+  </nav>
+
+  <!-- INICIO -->
+  <section id="inicio" class="apartado visible">
+    <h2>Inicio</h2>
+    <p>¡Bienvenido a <b>Veterinaria mao vet</b>! Cuidamos a tus mascotas con amor, profesionalismo y la mejor atención. Descubre nuestros servicios y productos pensados para el bienestar de tus mejores amigos.</p>
+    <img src="https://th.bing.com/th/id/OIP.QB3hykS6JidTI6OSjFB-XQHaHY?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2" alt="Veterinaria" style="width:100%;max-width:400px;border-radius:12px;box-shadow:0 2px 12px rgba(67,160,71,0.13);margin-top:18px;">
+  </section>
+
+  <!-- NOSOTROS -->
+  <section id="nosotros" class="apartado">
+    <h2>Nosotros</h2>
+    <p>Somos un equipo de veterinarios y amantes de los animales con más de 10 años de experiencia. Nuestra misión es brindar atención integral y cariño a cada mascota que nos visita, trabajando siempre con ética y profesionalismo.</p>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios" class="apartado">
+    <h2>Servicios</h2>
+    <span class="link-apartado" onclick="mostrarApartado('medicina')">Medicina en general</span>
+    <span class="link-apartado" onclick="mostrarApartado('cirugia')">Cirugía especializada</span>
+    <span class="link-apartado" onclick="mostrarApartado('laboratorio')">Laboratorio</span>
+    <span class="link-apartado" onclick="mostrarApartado('imagenes')">Imágenes</span>
+    <span class="link-apartado" onclick="mostrarApartado('banos')">Baños</span>
+  </section>
+
+  <!-- SUBSECCIONES DE SERVICIOS -->
+  <section id="medicina" class="apartado">
+    <h2>Medicina en general</h2>
+    <div class="servicio-imgs">
+      <img src="https://th.bing.com/th/id/OIP.kHZ5Ko_6WJ7fT84NCCJ0lgHaD5?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2" alt="Consulta">
+      <img src="https://th.bing.com/th/id/OIP.rUiZO5-P18zdMtK8BaNRqAHaD4?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2" alt="Chequeo">
+    </div>
+    <p>Consultas veterinarias, chequeos preventivos, diagnóstico y tratamiento de enfermedades comunes en perros y gatos.</p>
+    <span class="link-apartado" onclick="mostrarApartado('tiposmedicina')">Tipos de medicinas</span>
+    <button onclick="mostrarApartado('servicios')">Volver a Servicios</button>
+  </section>
+  <section id="tiposmedicina" class="apartado">
+    <h2>Tipos de Medicinas</h2>
+    <div class="servicio-imgs">
+      <img src="https://th.bing.com/th/id/OIP.L8DFPv3TiB96s7XLnBoqrwHaDv?w=289&h=177&c=7&r=0&o=7&pid=1.7&rm=3" alt="Medicinas">
+    </div>
+    <ul>
+      <li>Antibióticos</li>
+      <li>Antiparasitarios</li>
+      <li>Vitaminas y suplementos</li>
+      <li>Medicamentos para dolor y fiebre</li>
+    </ul>
+    <div class="reserva-casilla">
+      <input type="text" placeholder="Nombre de la medicina y cantidad">
+      <button class="btn-reservar" onclick="abrirModal('Reserva de Medicina')">Reservar</button>
+    </div>
+    <button onclick="mostrarApartado('medicina')">Volver</button>
+  </section>
+  <section id="cirugia" class="apartado">
+    <h2>Cirugía especializada</h2>
+    <div class="servicio-imgs">
+      <img src="https://th.bing.com/th/id/R.95d51ecc0f189ca5ff3967e700455d32?rik=9yWmWY6VeVJZvQ&pid=ImgRaw&r=0" alt="Cirugía">
+    </div>
+    <p>Cirugías de tejidos blandos, ortopedia, esterilización y procedimientos avanzados realizados por especialistas.</p>
+    <span class="link-apartado" onclick="mostrarApartado('tiposcirugia')">Tipos de cirugías</span>
+    <button onclick="mostrarApartado('servicios')">Volver a Servicios</button>
+  </section>
+  <section id="tiposcirugia" class="apartado">
+    <h2>Tipos de Cirugías</h2>
+    <div class="servicio-imgs">
+      <img src="https://th.bing.com/th/id/OIP.DS1K_bHi4yWunt7G9ZSXmwHaE7?w=265&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Cirugía">
+    </div>
+    <ul>
+      <li>Esterilización</li>
+      <li>Cirugía ortopédica</li>
+      <li>Cirugía de tejidos blandos</li>
+      <li>Cirugía de emergencia</li>
+    </ul>
+    <button onclick="mostrarApartado('cirugia')">Volver</button>
+  </section>
+  <section id="laboratorio" class="apartado">
+    <h2>Laboratorio</h2>
+    <div class="laboratorio-imgs">
+      <img src="https://medac.es/sites/default/files/blog/destacadas/material-de-laboratorio.jpg" alt="Laboratorio">
+    </div>
+    <p>Exámenes de sangre, orina, heces y pruebas especializadas para un diagnóstico preciso y rápido.</p>
+    <span class="link-apartado" onclick="mostrarApartado('tiposlaboratorio')">Tipos de pruebas de laboratorio</span>
+    <button onclick="mostrarApartado('servicios')">Volver a Servicios</button>
+  </section>
+  <section id="tiposlaboratorio" class="apartado">
+    <h2>Tipos de Pruebas de Laboratorio</h2>
+    <div class="laboratorio-imgs">
+      <img src="https://th.bing.com/th/id/OIP.UuWL53OoOcjJHogfBQp2IwHaE8?w=269&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Laboratorio">
+    </div>
+    <ul>
+      <li>Hemograma completo</li>
+      <li>Bioquímica sanguínea</li>
+      <li>Coprológico</li>
+      <li>Uroanálisis</li>
+    </ul>
+    <button onclick="mostrarApartado('laboratorio')">Volver</button>
+  </section>
+  <section id="imagenes" class="apartado">
+    <h2>Imágenes adicionales</h2>
+    <div class="servicio-imgs">
+      <img src="https://media.istockphoto.com/id/1060405408/es/foto/rayos-x-de-vista-lateral-perro-cerr%C3%B3-en-standard-de-t%C3%B3rax-y-t%C3%B3rax-con-signos-de-neumon%C3%ADa-y.jpg?s=612x612&w=0&k=20&c=48MfKdM9dvn2kuBjrp6Mv5uicPKmGfC-fhHeJkSaLdY=" alt="Rayos X">
+      <img src="https://th.bing.com/th/id/OIP.VWCWNRdE7IUcsHo2GY2oLgHaFc?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2" alt="Ecografía">
+    </div>
+    <p>Rayos X, ecografías y otros estudios de imagen para el diagnóstico avanzado de tu mascota.</p>
+    <button onclick="mostrarApartado('servicios')">Volver a Servicios</button>
+  </section>
+  <section id="banos" class="apartado">
+    <h2>Baños</h2>
+    <div class="banos-imgs">
+      <img src="https://th.bing.com/th/id/OIP.EhVeSr0uFO1EPPhQZYVfVAHaEO?w=318&h=181&c=7&r=0&o=7&pid=1.7&rm=3" alt="Baño">
+      <img src="https://th.bing.com/th/id/OIP.dSNlw4yYVdcslZdfzRlsBwHaHa?w=150&h=181&c=7&r=0&o=7&pid=1.7&rm=3" alt="Baño">
+    </div>
+    <p>Baños medicados, cortes de pelo, limpieza de oídos y uñas, todo con productos hipoalergénicos y personal capacitado.</p>
+    <span class="link-apartado" onclick="mostrarApartado('tiposbanos')">Tipos de baños y shampoo</span>
+    <button onclick="mostrarApartado('servicios')">Volver a Servicios</button>
+  </section>
+  <section id="tiposbanos" class="apartado">
+    <h2>Tipos de Baños y Shampoo</h2>
+    <div class="banos-imgs">
+      <img src="https://th.bing.com/th/id/OIP._rNAD81bQbNZ3lDJ3TEFYAHaE8?w=229&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Baño">
+    </div>
+    <ul>
+      <li>Baño tradicional</li>
+      <li>Baño medicado</li>
+      <li>Baño antipulgas</li>
+      <li>Shampoo hipoalergénico</li>
+      <li>Shampoo para pelo largo</li>
+    </ul>
+    <button onclick="mostrarApartado('banos')">Volver</button>
+  </section>
+
+  <!-- RESERVA DE CITAS -->
+  <section id="reserva" class="apartado">
+    <h2>Reserva de Citas</h2>
+    <form>
+      <label for="nombrecita">Nombre:</label><br>
+      <input type="text" id="nombrecita" name="nombrecita" required><br>
+      <label for="emailcita">Correo electrónico:</label><br>
+      <input type="email" id="emailcita" name="emailcita" required><br>
+      <label for="fecha">Fecha:</label><br>
+      <input type="text" id="fecha" name="fecha" placeholder="dd/mm/aaaa" required><br>
+      <label for="motivo">Motivo:</label><br>
+      <textarea id="motivo" name="motivo" rows="3" required></textarea><br>
+      <button type="submit">Reservar Cita</button>
+    </form>
+  </section>
+
+  <!-- INFORMACION DEL LOCAL -->
+  <section id="local" class="apartado">
+    <h2>Información del Local</h2>
+    <img src="https://th.bing.com/th/id/OIP.v0gK-3fX3BkwZlKccOC_dwHaFj?w=267&h=200&c=12&rs=1&p=0&o=6&pid=23.1" alt="Local" style="width:100%;max-width:400px;border-radius:12px;box-shadow:0 2px 12px rgba(67,160,71,0.13);margin-bottom:18px;">
+    <p>Dirección: urb, leon de vivero l'-8</p>
+    <p>psje los jardines, pueblo nuevo</p>
+    <p>twlwfono y whathsapp: +51 956 387 040</p>
+    <p>Horario: Lunes a Sábado 8:00am - 7:00pm</p>
+    <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-3.7037902%2C40.4167754%2C-3.7037902%2C40.4167754&amp;layer=mapnik" style="width:100%;height:220px;border-radius:10px;border:1px solid #ccc;margin-top:10px;" allowfullscreen="" loading="lazy"></iframe>
+  </section>
+
+  <!-- PRODUCTOS -->
+  <section id="productos" class="apartado">
+    <h2>Productos</h2>
+    <p>Haz clic en un producto para ver más detalles, referencias, información, reservar o comprar:</p>
+    <div class="productos-lista">
+      <div class="producto-card" onclick="mostrarApartado('alimento')">
+        <img src="https://images.unsplash.com/photo-1518715308788-3005759c61d3?auto=format&fit=crop&w=400&q=80" alt="Alimento Premium">
+        <h3>Alimento Premium para Perros</h3>
+        <p>Nutrición balanceada para todas las edades.</p>
+      </div>
+      <div class="producto-card" onclick="mostrarApartado('juguete')">
+        <img src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=400&q=80" alt="Juguete interactivo">
+        <h3>Juguete Interactivo para Gatos</h3>
+        <p>Estimula la mente y el ejercicio de tu gato.</p>
+      </div>
+      <div class="producto-card" onclick="mostrarApartado('shampoo')">
+        <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=400&q=80" alt="Shampoo para mascotas">
+        <h3>Shampoo Hipoalergénico</h3>
+        <p>Ideal para pieles sensibles. Aroma suave y sin parabenos.</p>
+      </div>
+      <div class="producto-card" onclick="mostrarApartado('transportadora')">
+        <img src="https://images.unsplash.com/photo-1518715308788-3005759c61d3?auto=format&fit=crop&w=400&q=80" alt="Transportadora">
+        <h3>Transportadora Mediana</h3>
+        <p>Segura y cómoda para viajes cortos y largos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBSECCIONES DE PRODUCTOS -->
+  <section id="alimento" class="apartado">
+    <h2>Alimento Premium para Perros</h2>
+    <p><b>Información:</b> Presentaciones: 2kg, 5kg, 10kg.<br>
+      Referencias: Marca CaninoPlus, Marca NutriDog</p>
+    <div class="reserva-casilla">
+      <input type="text" placeholder="Cantidad (ej: 2kg)">
+      <button class="btn-reservar" onclick="abrirModal('Alimento Premium para Perros')">Reservar/Comprar</button>
+    </div>
+    <button onclick="mostrarApartado('productos')">Volver a Productos</button>
+  </section>
+  <section id="juguete" class="apartado">
+    <h2>Juguete Interactivo para Gatos</h2>
+    <p><b>Información:</b> Material resistente y seguro.<br>
+      Referencias: Pelota con cascabel, Ratón de peluche</p>
+    <div class="reserva-casilla">
+      <input type="text" placeholder="Cantidad (ej: 1)">
+      <button class="btn-reservar" onclick="abrirModal('Juguete Interactivo para Gatos')">Reservar/Comprar</button>
+    </div>
+    <button onclick="mostrarApartado('productos')">Volver a Productos</button>
+  </section>
+  <section id="shampoo" class="apartado">
+    <h2>Shampoo Hipoalergénico</h2>
+    <p><b>Información:</b> Sin parabenos, aroma suave.<br>
+      Referencias: Marca PetCare, Marca SuavePiel</p>
+    <div class="reserva-casilla">
+      <input type="text" placeholder="Cantidad (ej: 1)">
+      <button class="btn-reservar" onclick="abrirModal('Shampoo Hipoalergénico')">Reservar/Comprar</button>
+    </div>
+    <button onclick="mostrarApartado('productos')">Volver a Productos</button>
+  </section>
+  <section id="transportadora" class="apartado">
+    <h2>Transportadora Mediana</h2>
+    <p><b>Información:</b> Fácil de limpiar.<br>
+      Referencias: Marca PetTravel, Marca SeguraPet</p>
+    <div class="reserva-casilla">
+      <input type="text" placeholder="Cantidad (ej: 1)">
+      <button class="btn-reservar" onclick="abrirModal('Transportadora Mediana')">Reservar/Comprar</button>
+    </div>
+    <button onclick="mostrarApartado('productos')">Volver a Productos</button>
+  </section>
+
+  <!-- MODAL PARA COMPRA/RESERVA -->
+  <div id="modalCompra" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="cerrarModal()">&times;</span>
+      <h3 id="modalProducto"></h3>
+      <form onsubmit="enviarCompra(event)">
+        <label for="nombreModal">Nombre:</label>
+        <input type="text" id="nombreModal" required>
+        <label for="emailModal">Correo:</label>
+        <input type="email" id="emailModal" required>
+        <label for="cantidadModal">Cantidad:</label>
+        <input type="text" id="cantidadModal" required>
+        <button type="submit">Enviar Reserva/Compra</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- GALERÍA -->
+  <section id="galeria" class="apartado">
+    <h2>Galería</h2>
+    <p>Algunos de nuestros pacientes y momentos especiales en la veterinaria:</p>
+    <div class="galeria-imgs">
+      <img src="https://images.unsplash.com/photo-1518715308788-3005759c61d3?auto=format&fit=crop&w=400&q=80" alt="Perro feliz">
+      <img src="https://images.unsplash.com/photo-1518715308788-3005759c61d3?auto=format&fit=crop&w=400&q=80" alt="Gato curioso">
+      <img src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=400&q=80" alt="Mascota en consulta">
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section id="equipo" class="apartado">
+    <h2>Equipo</h2>
+    <div class="equipo-lista">
+      <div class="equipo-card">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Juan Pérez">
+        <h4>Dr. Juan Pérez</h4>
+        <p>Veterinario General</p>
+        <p>Especialista en medicina interna y preventiva.</p>
+      </div>
+      <div class="equipo-card">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dra. Ana López">
+        <h4>Dra. Ana López</h4>
+        <p>Cirujana Veterinaria</p>
+        <p>Especialista en cirugía y ortopedia.</p>
+      </div>
+      <div class="equipo-card">
+        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Dr. Carlos Ruiz">
+        <h4>Dr. Carlos Ruiz</h4>
+        <p>Laboratorista</p>
+        <p>Especialista en diagnóstico clínico y laboratorio.</p>
+      </div>
+      <div class="equipo-card">
+        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Lic. Marta Gómez">
+        <h4>Lic. Marta Gómez</h4>
+        <p>Esteticista Canina</p>
+        <p>Especialista en baños, cortes y estética animal.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="apartado">
+    <h2>Contacto</h2>
+    <p>¿Tienes dudas o quieres agendar una cita? ¡Escríbenos!</p>
+    <form>
+      <label for="nombre">Nombre:</label><br>
+      <input type="text" id="nombre" name="nombre" required><br>
+      <label for="email">Correo electrónico:</label><br>
+      <input type="email" id="email" name="email" required><br>
+      <label for="mensaje">Mensaje:</label><br>
+      <textarea id="mensaje" name="mensaje" rows="4" required></textarea><br>
+      <button type="submit">Enviar</button>
+    </form>
+  </section>
+
+  <script>
+    // Mostrar solo el apartado seleccionado
+    function mostrarApartado(id) {
+      document.querySelectorAll('.apartado').forEach(sec => sec.classList.remove('visible'));
+      const sec = document.getElementById(id);
+      if(sec) {
+        sec.classList.add('visible');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      }
+      cerrarModal();
+    }
+    // Mostrar inicio al cargar
+    document.addEventListener('DOMContentLoaded', function() {
+      mostrarApartado('inicio');
+    });
+
+    // Modal de compra/reserva
+    function abrirModal(producto) {
+      document.getElementById('modalProducto').textContent = producto;
+      document.getElementById('modalCompra').style.display = 'flex';
+      document.getElementById('nombreModal').value = '';
+      document.getElementById('emailModal').value = '';
+      document.getElementById('cantidadModal').value = '';
+    }
+    function cerrarModal() {
+      document.getElementById('modalCompra').style.display = 'none';
+    }
+    function enviarCompra(event) {
+      event.preventDefault();
+      alert('¡Reserva/Compra enviada! Pronto nos pondremos en contacto.');
+      cerrarModal();
+    }
+  </script>
+</body>
+</html>
